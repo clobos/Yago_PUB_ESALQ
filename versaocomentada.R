@@ -1,16 +1,12 @@
 
 #                Carregando os Pacotes              #
 
-library(readxl)
-library(tibble)
-require(forecast)
-require(tseries)
-require(timeSeries)
-require(lmtest)
-require(lattice)
-require(xtable)
-require(timeSeries)
-library(forecast)
+library(readxl)#pacote para ler arquivo excel
+require(forecast)#pacote para realizar previsões ou modelos de séries temporais
+require(timeSeries)# pacote para transformar uma base de dados em uma série temporal
+
+
+
 
 #mostrando ao R o caminho onde estao os dados
 
@@ -37,7 +33,7 @@ pmilho <- Milho [,3]
 
 #Gráfico da série temporal para verificar a estacionaridade           #
 
-plot(pmilho,xlab='Tempo',ylab='Preços', main = "Milho", type= "l", col= "red") 
+plot(pmilho,xlab='Tempo',ylab='Preços', main = "Série mensal de preços da saca de milho no período de janeiro de 2005 a dezembro de 2019", type= "l", col= "red") 
 
 
 #Com base no comportamento do grafico os dados não sao estacionarios, então é preciso realizar uma transformação
@@ -60,8 +56,8 @@ ndiffs(pmilho,alpha=0.05,test="adf")
 
 d1s <- diff(pmilho, differences = 1)
 
-par(mfrow=c(2,2)) 
-plot(d1s,xlab='Tempo',ylab='1ª Diferença')
+par(mfrow=c(1,1)) 
+plot(d1s,xlab='Tempo',ylab='1 Diferença', main= "Série mensal de preços de milho estacionarizada com 1 diferença" )
 hist(d1s,main='',ylab='Frequência',xlab='1ª Diferença')
 acf(d1s,main='',ylab='FAC') #Média móvel
 pacf(d1s,main='',ylab='FACP') #Lag
@@ -94,7 +90,7 @@ a <- milho2 [, 3]
 
 fit6<- forecast::Arima(pmilho, order=c(1,1,1))
 fcast_cons6 <-forecast(fit6, h= 12)
-autoplot(fcast_cons6)
+autoplot(fcast_cons6, ylab="Preço", xlab= "Tempo", main= "Previsão do preço da saca de milho para o ano de 2020")
 
 data.frame(a, fcast_cons6)
 
